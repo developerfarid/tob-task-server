@@ -23,7 +23,8 @@ async function run() {
     const productCollection = database.collection('post');
     const addPostCollection = database.collection('addPost');
     const userCollection = database.collection('user');
-    const ollection = database.collection('booking');
+    const reviewCollection = database.collection('review');
+
 
 
 
@@ -54,7 +55,15 @@ async function run() {
       const result = await addPostCollection.findOne(query)
       res.json(result)
     })
-
+    app.get("/addPost/:id", async (req, res) => {
+      
+      const id = req.params.id
+      console.log(id, "id");
+      const query = { _id: ObjectId(id) };
+      const result = await addPostCollection.findOne(query)
+      res.send(result)
+    })
+ 
   
    
     app.post("/user", async (req, res) => {
@@ -88,12 +97,7 @@ async function run() {
       const result = await addPostCollection.find({}).toArray();
       res.send(result)
     })
-    app.get("/addPost/:id", async (req, res) => {
-      const id = req.params.id
-      const query = { _id: ObjectId(id) };
-      const result = await addPostCollection.findOne(query)
-      res.send(result)
-    })
+  
     app.put("/addPost/:id", async (req, res) => {
       const id = req.params.id
       const query = { _id: ObjectId(id) };
@@ -107,10 +111,7 @@ async function run() {
       const result = await addPostCollection.updateOne(query, updateDoc, options)
       res.send(result)
     })
-    app.get("/booking", async (req, res) => {
-      const result = await ollection.find({}).toArray();
-      res.send(result)
-    })
+   
    
     app.put("/post/:id", async (req, res) => {
       const id = req.params.id
@@ -138,12 +139,7 @@ async function run() {
             res.json(result);
  })
 
-    app.get("/addPost/:email", async (req, res) => {
-      const email = req.params.email
-      const query = addPostCollection.find({email :email })
-        const result = await query.toArray()
-        res.send(result)
-      })
+ 
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email
       const query = userCollection.find({email :email })
@@ -169,13 +165,7 @@ async function run() {
     //       res.send(result)
 
     // })
-    app.get("/post/:id", async (req, res) => {
-      const id = req.params.id
-      const query = { _id: ObjectId(id) };
-      const result = await productCollection.findOne(query)
-      res.send(result)
-    })
- 
+   
 
     console.log("ok");
   } finally {
