@@ -20,15 +20,9 @@ async function run() {
   try {
     await client.connect();
     const database = client.db('tour');
-    const productCollection = database.collection('post');
     const addPostCollection = database.collection('addPost');
     const userCollection = database.collection('user');
     const reviewCollection = database.collection('review');
-
-
-
-
-
 
     app.post("/post", async (req, res) => {
       const result = await productCollection.insertOne(req.body)
@@ -81,11 +75,7 @@ async function run() {
       const result = await userCollection.updateOne(fillter, updateSet, options)
       res.json(result)
     })
-    app.get("/post", async (req, res) => {
-      
-      const result = await productCollection.find({}).limit(6).toArray();
-      res.send(result)
-    })
+
     app.get("/user", async (req, res) => {
       
       const result = await userCollection.find({}).toArray();
@@ -111,24 +101,7 @@ async function run() {
       const result = await addPostCollection.updateOne(query, updateDoc, options)
       res.send(result)
     })
-   
-   
-    app.put("/post/:id", async (req, res) => {
-      const id = req.params.id
-      console.log(id);
-      const query = {_id: ObjectId(id)};
-      console.log(query);
-      const options = { upsert: true };
-      console.log(req.body);
-      const updateDoc = {
-        $set: {
-            status:req.body?.up
-        },
-    };
-    const result = await productCollection.updateOne(query,updateDoc,options )
-        res.json(result)
 
-  })
 
   app.put('/user/admin',  async (req, res) => {
     const user = req.body;
@@ -154,19 +127,7 @@ async function run() {
       console.log(query);
       const result = await addPostCollection.deleteOne(query)
           res.send(result)
-
     })
-    // app.delete("/productAll/:id", async (req, res) => {
-    //   const id = req.params.id
-    //   // console.log(id);
-    //   const query = { _id: ObjectId(id) };
-    //   console.log(query,"ok");
-    //   const result = await productCollection.deleteOne(query)
-    //       res.send(result)
-
-    // })
-   
-
     console.log("ok");
   } finally {
     // Ensures that the client will close when you finish/error
